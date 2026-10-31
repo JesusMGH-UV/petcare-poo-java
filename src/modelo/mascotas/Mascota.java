@@ -52,3 +52,4 @@ public abstract class Mascota {
     public String toString() {
         return nombre + " (" + edad + " años, " + peso + " kg) - Dueño: " + dueno.getNombreCompleto();
     }
+}
