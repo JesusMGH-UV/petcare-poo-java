@@ -1,6 +1,6 @@
 package modelo.mascotas;
 
-import modelo.persona.Dueno;
+import modelo.personas.Dueno;
 
 public class Gato extends Mascota {
 
@@ -16,7 +16,7 @@ public class Gato extends Mascota {
         return "Miau";
     }
 
-    public boolean isEsDomestico() {
+    public boolean isEsDomestico () {
         return esDomestico;
     }
 }
