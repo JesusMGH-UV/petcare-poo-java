@@ -1,0 +1,250 @@
+classDiagram
+    namespace petcare_clinica {
+        class Clinica {
+            -String nombre
+            -List~Consultorio~ consultorios
+            -List~Veterinario~ veterinarios
+            -List~Recepcionista~ recepcionistas
+            -List~Dueno~ duenos
+            -List~Mascota~ mascotas
+            -List~Cita~ citas
+            -List~Comprobante~ comprobantes
+            +Clinica()
+            +Clinica(String nombre)
+            +registrarConsultorio(int numero) void
+            +contratarVeterinario(Veterinario vet) void
+            +contratarRecepcionista(Recepcionista r) void
+            +registrarDueno(Dueno d) void
+            +registrarMascota(Mascota m) void
+            +agendarCita(LocalDateTime fechaHora, Mascota mascota, Veterinario veterinario, Consultorio consultorio) Cita
+            +registrarAtencion(Cita cita, String diagnostico, String tratamiento, List~ServicioCobrar~ servicios) Comprobante
+            +buscarMascota(String nombre) List~Mascota~
+            +buscarMascota(Dueno dueno) List~Mascota~
+            +consultarCobrosPorMascota(Mascota m) List~Comprobante~
+            +consultarCobrosPorVeterinario(Veterinario v) List~Comprobante~
+            -validarDisponibilidad(Veterinario v, Consultorio c, LocalDateTime fh) boolean
+            +getNombre() String
+            +getConsultorios() List~Consultorio~
+            +getVeterinarios() List~Veterinario~
+            +getRecepcionistas() List~Recepcionista~
+            +getDuenos() List~Dueno~
+            +getMascotas() List~Mascota~
+            +getCitas() List~Cita~
+            +getComprobantes() List~Comprobante~
+        }
+        class Consultorio {
+            -int numero
+            +Consultorio(int numero)
+            +getNumero() int
+        }
+        class Cita {
+            -String idCita
+            -LocalDateTime fechaHora
+            -EstadoCita estado
+            -Mascota mascota
+            -Veterinario veterinario
+            -Consultorio consultorio
+            +Cita(String idCita, LocalDateTime fechaHora, Mascota mascota, Veterinario veterinario, Consultorio consultorio)
+            +marcarComoAtendida() void
+            +cancelar() void
+            +getIdCita() String
+            +getFechaHora() LocalDateTime
+            +getEstado() EstadoCita
+            +getMascota() Mascota
+            +getVeterinario() Veterinario
+            +getConsultorio() Consultorio
+        }
+        class EstadoCita {
+            <<enumeration>>
+            PROGRAMADA
+            ATENDIDA
+            CANCELADA
+        }
+        class Comprobante {
+            -String folio
+            -LocalDateTime fechaEmision
+            -Cita citaAsociada
+            -List~ServicioCobrar~ servicios
+            -double total
+            +Comprobante(Cita citaAsociada, List~ServicioCobrar~ servicios)
+            +calcularTotal() double
+            +imprimirDetalle() String
+            +getMascota() Mascota
+            +getVeterinario() Veterinario
+            +getFolio() String
+            +getFechaEmision() LocalDateTime
+            +getCitaAsociada() Cita
+            +getServicios() List~ServicioCobrar~
+            +getTotal() double
+        }
+    }
+
+    namespace petcare_personas {
+        class Persona {
+            <<abstract>>
+            #String nombre
+            #String apellido
+            #String telefono
+            #String correo
+            #Persona(String nombre, String apellido, String telefono, String correo)
+            +getNombreCompleto() String
+            +getNombre() String
+            +getApellido() String
+            +getTelefono() String
+            +getCorreo() String
+            +actualizarContacto(String tel, String correo) void
+        }
+        class Dueno {
+            -String direccion
+            +Dueno(String nombre, String apellido, String telefono, String correo, String direccion)
+            +getDireccion() String
+        }
+        class Veterinario {
+            -String cedulaProfesional
+            -String especialidad
+            +Veterinario(String nombre, String apellido, String telefono, String correo, String cedulaProfesional, String especialidad)
+            +getCedulaProfesional() String
+            +getEspecialidad() String
+        }
+        class Recepcionista {
+            -String turno
+            +Recepcionista(String nombre, String apellido, String telefono, String correo, String turno)
+            +getTurno() String
+            +cambiarTurno(String nuevoTurno) void
+        }
+    }
+
+    namespace petcare_mascotas {
+        class Mascota {
+            <<abstract>>
+            #String nombre
+            #int edad
+            #double peso
+            #Dueno dueno
+            -HistorialClinico historial
+            #Mascota(String nombre, int edad, double peso, Dueno dueno)
+            +emitirSonido() String*
+            +setEdad(int edad) void
+            +setPeso(double peso) void
+            +getNombre() String
+            +getEdad() int
+            +getPeso() double
+            +getDueno() Dueno
+            +getHistorial() HistorialClinico
+        }
+        class Perro {
+            -String raza
+            -String nivelEnergia
+            +Perro(String nombre, int edad, double peso, Dueno dueno, String raza, String nivelEnergia)
+            +Perro(String nombre, int edad, double peso, Dueno dueno)
+            +emitirSonido() String
+            +getRaza() String
+            +getNivelEnergia() String
+        }
+        class Gato {
+            -boolean esDomestico
+            +Gato(String nombre, int edad, double peso, Dueno dueno, boolean esDomestico)
+            +emitirSonido() String
+            +isEsDomestico() boolean
+        }
+        class AveExotica {
+            -double longitudAlas
+            +AveExotica(String nombre, int edad, double peso, Dueno dueno, double longitudAlas)
+            +emitirSonido() String
+            +getLongitudAlas() double
+        }
+        class HistorialClinico {
+            -String codigoHistorial
+            -List~Consulta~ consultas
+            +HistorialClinico(String codigoHistorial)
+            +agregarConsulta(Consulta c) void
+            +getConsultas() List~Consulta~
+            +obtenerResumen() String
+            +getCodigoHistorial() String
+        }
+        class Consulta {
+            -LocalDateTime fecha
+            -String diagnostico
+            -String tratamiento
+            -Veterinario veterinario
+            -List~ServicioCobrar~ serviciosAplicados
+            +Consulta(String diagnostico, String tratamiento, Veterinario veterinario, List~ServicioCobrar~ serviciosAplicados)
+            +agregarServicio(ServicioCobrar s) void
+            +calcularTotalServicios() double
+            +getFecha() LocalDateTime
+            +getDiagnostico() String
+            +getTratamiento() String
+            +getVeterinario() Veterinario
+            +getServiciosAplicados() List~ServicioCobrar~
+        }
+    }
+
+    namespace petcare_servicios {
+        class ServicioCobrar {
+            <<interface>>
+            +calcularCosto() double
+            +getDescripcion() String
+        }
+        class ConsultaGeneral {
+            -double tarifaBase
+            -String motivo
+            +ConsultaGeneral()
+            +ConsultaGeneral(double tarifaBase, String motivo)
+            +ConsultaGeneral(String motivo)
+            +calcularCosto() double
+            +getDescripcion() String
+            +getTarifaBase() double
+            +getMotivo() String
+        }
+        class Vacunacion {
+            -double tarifaBaseAplicacion
+            -String nombreVacuna
+            -double costoVacuna
+            +Vacunacion(double tarifaBaseAplicacion, String nombreVacuna, double costoVacuna)
+            +calcularCosto() double
+            +getDescripcion() String
+            +getTarifaBaseAplicacion() double
+            +getNombreVacuna() String
+            +getCostoVacuna() double
+        }
+        class Cirugia {
+            -double tarifaPorHora
+            -double horasQuirofano
+            -double factorComplejidad
+            +Cirugia(double tarifaPorHora, double horasQuirofano, double factorComplejidad)
+            +calcularCosto() double
+            +getDescripcion() String
+            +getTarifaPorHora() double
+            +getHorasQuirofano() double
+            +getFactorComplejidad() double
+        }
+    }
+
+    Persona <|-- Dueno
+    Persona <|-- Veterinario
+    Persona <|-- Recepcionista
+    Mascota <|-- Perro
+    Mascota <|-- Gato
+    Mascota <|-- AveExotica
+    ServicioCobrar <|.. ConsultaGeneral
+    ServicioCobrar <|.. Vacunacion
+    ServicioCobrar <|.. Cirugia
+
+    Clinica *-- "0..*" Consultorio
+    Clinica o-- "0..*" Veterinario
+    Clinica o-- "0..*" Recepcionista
+    Clinica "1" --> "0..*" Dueno
+    Clinica "1" --> "0..*" Mascota
+    Clinica "1" --> "0..*" Cita
+    Clinica "1" --> "0..*" Comprobante
+    Mascota *-- "1" HistorialClinico
+    HistorialClinico *-- "0..*" Consulta
+    Mascota "0..*" --> "1" Dueno : +propietario
+    Cita "0..*" --> "1" Mascota : +paciente
+    Cita "0..*" --> "1" Veterinario : +medicoAsignado
+    Cita "0..*" --> "1" Consultorio : +espacioAsignado
+    Comprobante "0..1" --> "1" Cita : +citaFacturada
+    Cita --> EstadoCita
+    Consulta "0..*" --> "1" Veterinario
+    Consulta "0..*" --> "0..*" ServicioCobrar
+    Comprobante "0..*" --> "0..*" ServicioCobrar
