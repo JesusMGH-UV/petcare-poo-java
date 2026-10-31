@@ -12,4 +12,9 @@ public class Dueno extends Persona {
     public String getDireccion() {
         return direccion;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | " + direccion;
+    }
 }

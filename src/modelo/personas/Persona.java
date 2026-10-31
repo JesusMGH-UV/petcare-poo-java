@@ -41,4 +41,9 @@ public abstract class Persona {
         this.telefono = tel;
         this.correo = correo;
     }
+
+    @Override
+    public String toString() {
+        return getNombreCompleto() + " | tel: " + telefono + " | " + correo;
+    }
 }

@@ -31,11 +31,13 @@ classDiagram
             +getMascotas() List~Mascota~
             +getCitas() List~Cita~
             +getComprobantes() List~Comprobante~
+            +toString() String
         }
         class Consultorio {
             -int numero
             +Consultorio(int numero)
             +getNumero() int
+            +toString() String
         }
         class Cita {
             -String idCita
@@ -53,6 +55,7 @@ classDiagram
             +getMascota() Mascota
             +getVeterinario() Veterinario
             +getConsultorio() Consultorio
+            +toString() String
         }
         class EstadoCita {
             <<enumeration>>
@@ -76,6 +79,7 @@ classDiagram
             +getCitaAsociada() Cita
             +getServicios() List~ServicioCobrar~
             +getTotal() double
+            +toString() String
         }
     }
 
@@ -93,11 +97,13 @@ classDiagram
             +getTelefono() String
             +getCorreo() String
             +actualizarContacto(String tel, String correo) void
+            +toString() String
         }
         class Dueno {
             -String direccion
             +Dueno(String nombre, String apellido, String telefono, String correo, String direccion)
             +getDireccion() String
+            +toString() String
         }
         class Veterinario {
             -String cedulaProfesional
@@ -105,12 +111,14 @@ classDiagram
             +Veterinario(String nombre, String apellido, String telefono, String correo, String cedulaProfesional, String especialidad)
             +getCedulaProfesional() String
             +getEspecialidad() String
+            +toString() String
         }
         class Recepcionista {
             -String turno
             +Recepcionista(String nombre, String apellido, String telefono, String correo, String turno)
             +getTurno() String
             +cambiarTurno(String nuevoTurno) void
+            +toString() String
         }
     }
 
@@ -131,6 +139,7 @@ classDiagram
             +getPeso() double
             +getDueno() Dueno
             +getHistorial() HistorialClinico
+            +toString() String
         }
         class Perro {
             -String raza
