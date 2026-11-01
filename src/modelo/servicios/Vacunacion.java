@@ -6,34 +6,34 @@ public class Vacunacion implements ServicioCobrar {
     private String nombreVacuna;
     private double costoVacuna;
 
-    public Vacunacion(double tarifaBaseAplicacion, String nombreVacuna, double costoVacuna) {
-        if (tarifaBaseAplicacion < 0 || costoVacuna < 0) {
-            throw new IllegalArgumentException("Los costos de vacunacion no pueden ser negativos");
+    public Vacunacion(double cargoAplicacion, String biologico, double precioDosis) {
+        if (cargoAplicacion < 0 || precioDosis < 0) {
+            throw new IllegalArgumentException("Ni la aplicacion ni la dosis pueden tener costo menor a cero");
         }
-        this.tarifaBaseAplicacion = tarifaBaseAplicacion;
-        this.nombreVacuna = nombreVacuna;
-        this.costoVacuna = costoVacuna;
+        this.tarifaBaseAplicacion = cargoAplicacion;
+        this.nombreVacuna = biologico;
+        this.costoVacuna = precioDosis;
     }
 
     @Override
     public double calcularCosto() {
-        return tarifaBaseAplicacion + costoVacuna;
+        return this.tarifaBaseAplicacion + this.costoVacuna;
     }
 
     @Override
     public String getDescripcion() {
-        return "Vacunacion: " + nombreVacuna;
+        return "Aplicacion de vacuna: " + nombreVacuna;
     }
 
     public double getTarifaBaseAplicacion() {
-        return tarifaBaseAplicacion;
+        return this.tarifaBaseAplicacion;
     }
 
     public String getNombreVacuna() {
-        return nombreVacuna;
+        return this.nombreVacuna;
     }
 
     public double getCostoVacuna() {
-        return costoVacuna;
+        return this.costoVacuna;
     }
 }

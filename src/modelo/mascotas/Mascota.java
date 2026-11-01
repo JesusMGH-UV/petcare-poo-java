@@ -8,10 +8,14 @@ public abstract class Mascota {
     protected int edad;
     protected double peso;
     protected Dueno dueno;
+    private HistorialClinico historial;
+    private static int secuenciaExpedientes = 0;
 
     protected Mascota(String nombre, int edad, double peso, Dueno dueno) {
         this.nombre = nombre;
         this.dueno = dueno;
+        secuenciaExpedientes++;
+        this.historial = new HistorialClinico("EXP-" + secuenciaExpedientes);
         setEdad(edad);
         setPeso(peso);
     }
@@ -46,6 +50,14 @@ public abstract class Mascota {
 
     public Dueno getDueno() {
         return this.dueno;
+    }
+
+    public HistorialClinico getHistorial() {
+        return historial;
+    }
+
+    public void darDeBaja() {
+        this.historial = null;
     }
 
     @Override

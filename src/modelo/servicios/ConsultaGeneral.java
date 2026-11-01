@@ -9,33 +9,33 @@ public class ConsultaGeneral implements ServicioCobrar {
         this(350.0, "Revision general");
     }
 
-    public ConsultaGeneral(double tarifaBase, String motivo) {
-        if (tarifaBase < 0) {
-            throw new IllegalArgumentException("La tarifa base no puede ser negativa");
+    public ConsultaGeneral(double montoBase, String motivoConsulta) {
+        if (montoBase < 0) {
+            throw new IllegalArgumentException("Monto invalido: la tarifa base no admite numeros negativos");
         }
-        this.tarifaBase = tarifaBase;
-        this.motivo = motivo;
+        this.tarifaBase = montoBase;
+        this.motivo = motivoConsulta;
     }
 
-    public ConsultaGeneral(String motivo) {
-        this(350.0, motivo);
+    public ConsultaGeneral(String motivoConsulta) {
+        this(350.0, motivoConsulta);
     }
 
     @Override
     public double calcularCosto() {
-        return tarifaBase;
+        return this.tarifaBase;
     }
 
     @Override
     public String getDescripcion() {
-        return "Consulta general: " + motivo;
+        return "Consulta general (" + motivo + ")";
     }
 
     public double getTarifaBase() {
-        return tarifaBase;
+        return this.tarifaBase;
     }
 
     public String getMotivo() {
-        return motivo;
+        return this.motivo;
     }
 }
