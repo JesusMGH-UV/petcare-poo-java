@@ -67,6 +67,26 @@ public class Clinica {
         return cita;
     }
 
+    public List<Comprobante> consultarCobrosPorMascota(Mascota m) {
+        List<Comprobante> resultado = new ArrayList<>();
+        for (Comprobante c : comprobantes) {
+            if (c.getMascota() == m) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Comprobante> consultarCobrosPorVeterinario(Veterinario v) {
+        List<Comprobante> resultado = new ArrayList<>();
+        for (Comprobante c : comprobantes) {
+            if (c.getVeterinario() == v) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
+    }
+
     private boolean consultorioOcupado(Consultorio consultorio, LocalDateTime fechaHora) {
         for (Cita c : citas) {
             if (c.getConsultorio() == consultorio && c.getFechaHora().equals(fechaHora) && c.getEstado() != EstadoCita.CANCELADA) {
