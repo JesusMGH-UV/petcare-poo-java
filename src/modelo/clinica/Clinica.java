@@ -87,6 +87,10 @@ public class Clinica {
         return resultado;
     }
 
+    private boolean validarDisponibilidad(Veterinario v, Consultorio c, LocalDateTime fh) {
+        return true;
+    }
+
     public String getNombre() {
         return nombre;
     }
