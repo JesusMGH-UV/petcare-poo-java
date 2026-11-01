@@ -53,9 +53,24 @@ public class Clinica {
         if (!validarDisponibilidad(veterinario, consultorio, fechaHora)) {
             throw new IllegalStateException("No hay disponibilidad para esa fecha");
         }
-        Cita cita = new Cita("CITA-" + String.format("%03d", citas.size() + 1), fechaHora, mascota, veterinario, consultorio);
+        Cita cita;
+        if (veterinarioOcupado(veterinario, fechaHora)) {
+            throw new IllegalStateException("El veterinario ya tiene una cita a esa hora");
+        }
+          else {
+            cita = new Cita("CITA-" + String.format("%03d", citas.size() + 1), fechaHora, mascota, veterinario, consultorio);
+        }
         citas.add(cita);
         return cita;
+    }
+
+    private boolean veterinarioOcupado(Veterinario veterinario, LocalDateTime fechaHora) {
+        for (Cita c : citas) {
+            if (c.getVeterinario() == veterinario && c.getFechaHora().equals(fechaHora) && c.getEstado() != EstadoCita.CANCELADA) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Comprobante registrarAtencion(Cita cita, String diagnostico, String tratamiento, List<ServicioCobrar> servicios) {
