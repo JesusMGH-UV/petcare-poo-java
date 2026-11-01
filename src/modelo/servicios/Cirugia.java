@@ -17,7 +17,7 @@ public class Cirugia implements ServicioCobrar {
 
     @Override
     public double calcularCosto() {
-        return (tarifaPorHora + horasQuirofano) * factorComplejidad;
+        return tarifaPorHora * horasQuirofano * factorComplejidad;
     }
 
     @Override
