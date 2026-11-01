@@ -6,13 +6,13 @@ public class Cirugia implements ServicioCobrar {
     private double horasQuirofano;
     private double factorComplejidad;
 
-    public Cirugia(double tarifaPorHora, double horasQuirofano, double factorComplejidad) {
-        if (tarifaPorHora < 0 || horasQuirofano < 0 || factorComplejidad < 0) {
-            throw new IllegalArgumentException("Los valores de la cirugia no pueden ser negativos");
+    public Cirugia(double costoHora, double duracionHoras, double nivelRiesgo) {
+        if (costoHora < 0 || duracionHoras < 0 || nivelRiesgo < 0) {
+            throw new IllegalArgumentException("Error en cirugia: tarifa, duracion y factor deben ser positivos");
         }
-        this.tarifaPorHora = tarifaPorHora;
-        this.horasQuirofano = horasQuirofano;
-        this.factorComplejidad = factorComplejidad;
+        this.tarifaPorHora = costoHora;
+        this.horasQuirofano = duracionHoras;
+        this.factorComplejidad = nivelRiesgo;
     }
 
     @Override
@@ -22,18 +22,18 @@ public class Cirugia implements ServicioCobrar {
 
     @Override
     public String getDescripcion() {
-        return "Cirugia (" + horasQuirofano + " h de quirofano)";
+        return "Intervencion quirurgica - " + horasQuirofano + " hrs";
     }
 
     public double getTarifaPorHora() {
-        return tarifaPorHora;
+        return this.tarifaPorHora;
     }
 
     public double getHorasQuirofano() {
-        return horasQuirofano;
+        return this.horasQuirofano;
     }
 
     public double getFactorComplejidad() {
-        return factorComplejidad;
+        return this.factorComplejidad;
     }
 }

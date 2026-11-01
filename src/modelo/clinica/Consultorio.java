@@ -4,19 +4,19 @@ public class Consultorio {
 
     private int numero;
 
-    public Consultorio(int numero) {
-        if (numero <= 0) {
-            throw new IllegalArgumentException("El numero de consultorio debe ser mayor a 0");
+    public Consultorio(int numAsignado) {
+        if (numAsignado <= 0) {
+            throw new IllegalArgumentException("Numero de consultorio fuera de rango (requiere valor > 0)");
         }
-        this.numero = numero;
+        this.numero = numAsignado;
     }
 
     public int getNumero() {
-        return numero;
+        return this.numero;
     }
 
     @Override
     public String toString() {
-        return "Consultorio " + numero;
+        return "Consultorio #" + numero;
     }
 }
