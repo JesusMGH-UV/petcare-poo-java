@@ -24,7 +24,7 @@ Programa de consola en Java para administrar la operación diaria de la clínica
 
 El análisis detallado de clases candidatas, objetos de ejemplo y justificación de relaciones se encuentra en [docs/analisis.md](docs/analisis.md).
 
-![Diagrama de clases](docs/diagramas/diagrama-clases.png)
+![Diagrama de clases](docs/diagramas/clases.png)
 
 ### Decisiones de diseño
 
