@@ -50,6 +50,7 @@ public class Menu {
                 break;
             case 7:
                 listarMascotasYSonidos();
+                break;
             case 8:
                 verTotalPorVeterinario();
                 break;
