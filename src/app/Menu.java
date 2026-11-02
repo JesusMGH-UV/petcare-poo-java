@@ -1,10 +1,8 @@
 package app;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import modelo.clinica.Cita;
 import modelo.clinica.Clinica;
 import modelo.clinica.Comprobante;
@@ -23,12 +21,11 @@ import modelo.servicios.Vacunacion;
 public class Menu {
 
     private Clinica clinica;
-    private Scanner scanner;
-    private DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private Entrada entrada;
 
-    public Menu(Clinica clinica, Scanner scanner) {
+    public Menu(Clinica clinica, Entrada entrada) {
         this.clinica = clinica;
-        this.scanner = scanner;
+        this.entrada = entrada;
     }
 
     public void procesarOpcion(int opcion) {
@@ -45,6 +42,20 @@ public class Menu {
             case 4:
                 atenderOCancelarCita();
                 break;
+            case 5:
+                generarComprobante();
+                break;
+            case 6:
+                consultarHistorial();
+                break;
+            case 7:
+                listarMascotasYSonidos();
+            case 8:
+                verTotalPorVeterinario();
+                break;
+            case 9:
+                darDeBajaMascota();
+                break;
             default:
                 System.out.println("Opcion no valida.");
                 break;
@@ -54,14 +65,10 @@ public class Menu {
     public void registrarDuenoYMascota() {
         try {
             Dueno dueno = obtenerOCrearDueno();
-            System.out.print("Nombre de la mascota: ");
-            String nombreMascota = scanner.nextLine().trim();
-            System.out.print("Edad (anos): ");
-            int edad = Integer.parseInt(scanner.nextLine().trim());
-            System.out.print("Peso (kg): ");
-            double peso = Double.parseDouble(scanner.nextLine().trim());
-            System.out.print("Tipo (1=Perro, 2=Gato, 3=Ave exotica): ");
-            int tipo = Integer.parseInt(scanner.nextLine().trim());
+            String nombreMascota = entrada.leerTexto("Nombre de la mascota: ");
+            int edad = entrada.leerEntero("Edad (anos): ");
+            double peso = entrada.leerDecimal("Peso (kg): ");
+            int tipo = entrada.leerEntero("Tipo (1=Perro, 2=Gato, 3=Ave exotica): ");
 
             Mascota mascota = crearMascotaPorTipo(tipo, nombreMascota, edad, peso, dueno);
             if (mascota != null) {
@@ -75,27 +82,18 @@ public class Menu {
 
     private Dueno obtenerOCrearDueno() {
         List<Dueno> duenos = clinica.getDuenos();
-        if (!duenos.isEmpty()) {
-            System.out.print("Usar dueno existente? (s/n): ");
-            if (scanner.nextLine().trim().equalsIgnoreCase("s")) {
-                for (int i = 0; i < duenos.size(); i++) {
-                    System.out.println((i + 1) + ". " + duenos.get(i));
-                }
-                System.out.print("Numero de dueno: ");
-                int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
-                return duenos.get(idx);
+        if (!duenos.isEmpty() && entrada.leerConfirmacion("Usar dueno existente? (s/n): ")) {
+            for (int i = 0; i < duenos.size(); i++) {
+                System.out.println((i + 1) + ". " + duenos.get(i));
             }
+            int idx = entrada.leerEntero("Numero de dueno: ") - 1;
+            return duenos.get(idx);
         }
-        System.out.print("Nombre del dueno: ");
-        String nombre = scanner.nextLine().trim();
-        System.out.print("Apellido: ");
-        String apellido = scanner.nextLine().trim();
-        System.out.print("Telefono: ");
-        String telefono = scanner.nextLine().trim();
-        System.out.print("Correo: ");
-        String correo = scanner.nextLine().trim();
-        System.out.print("Direccion: ");
-        String direccion = scanner.nextLine().trim();
+        String nombre = entrada.leerTexto("Nombre del dueno: ");
+        String apellido = entrada.leerTexto("Apellido: ");
+        String telefono = entrada.leerTexto("Telefono: ");
+        String correo = entrada.leerTexto("Correo: ");
+        String direccion = entrada.leerTexto("Direccion: ");
         Dueno nuevo = new Dueno(nombre, apellido, telefono, correo, direccion);
         clinica.registrarDueno(nuevo);
         return nuevo;
@@ -103,18 +101,14 @@ public class Menu {
 
     private Mascota crearMascotaPorTipo(int tipo, String nombre, int edad, double peso, Dueno dueno) {
         if (tipo == 1) {
-            System.out.print("Raza: ");
-            String raza = scanner.nextLine().trim();
-            System.out.print("Nivel de energia: ");
-            String energia = scanner.nextLine().trim();
+            String raza = entrada.leerTexto("Raza: ");
+            String energia = entrada.leerTexto("Nivel de energia: ");
             return new Perro(nombre, edad, peso, dueno, raza, energia);
         } else if (tipo == 2) {
-            System.out.print("Es domestico? (s/n): ");
-            boolean domestico = scanner.nextLine().trim().equalsIgnoreCase("s");
+            boolean domestico = entrada.leerConfirmacion("Es domestico? (s/n): ");
             return new Gato(nombre, edad, peso, dueno, domestico);
         } else if (tipo == 3) {
-            System.out.print("Longitud de alas (cm): ");
-            double alas = Double.parseDouble(scanner.nextLine().trim());
+            double alas = entrada.leerDecimal("Longitud de alas (cm): ");
             return new AveExotica(nombre, edad, peso, dueno, alas);
         }
         System.out.println("Tipo de mascota no reconocido.");
@@ -122,18 +116,12 @@ public class Menu {
     }
 
     public void registrarVeterinario() {
-        System.out.print("Nombre del veterinario: ");
-        String nombre = scanner.nextLine().trim();
-        System.out.print("Apellido: ");
-        String apellido = scanner.nextLine().trim();
-        System.out.print("Telefono: ");
-        String telefono = scanner.nextLine().trim();
-        System.out.print("Correo: ");
-        String correo = scanner.nextLine().trim();
-        System.out.print("Cedula profesional: ");
-        String cedula = scanner.nextLine().trim();
-        System.out.print("Especialidad: ");
-        String especialidad = scanner.nextLine().trim();
+        String nombre = entrada.leerTexto("Nombre del veterinario: ");
+        String apellido = entrada.leerTexto("Apellido: ");
+        String telefono = entrada.leerTexto("Telefono: ");
+        String correo = entrada.leerTexto("Correo: ");
+        String cedula = entrada.leerTexto("Cedula profesional: ");
+        String especialidad = entrada.leerTexto("Especialidad: ");
 
         Veterinario vet = new Veterinario(nombre, apellido, telefono, correo, cedula, especialidad);
         clinica.contratarVeterinario(vet);
@@ -149,8 +137,7 @@ public class Menu {
             Mascota mascota = seleccionarMascota();
             Veterinario vet = seleccionarVeterinario();
             Consultorio consultorio = seleccionarConsultorio();
-            System.out.print("Fecha y hora (yyyy-MM-dd HH:mm): ");
-            LocalDateTime fechaHora = LocalDateTime.parse(scanner.nextLine().trim(), formatoFecha);
+            LocalDateTime fechaHora = entrada.leerFechaHora("Fecha y hora (yyyy-MM-dd HH:mm): ");
 
             Cita cita = clinica.agendarCita(fechaHora, mascota, vet, consultorio);
             System.out.println("Cita agendada: " + cita);
@@ -169,10 +156,8 @@ public class Menu {
             for (int i = 0; i < citas.size(); i++) {
                 System.out.println((i + 1) + ". " + citas.get(i));
             }
-            System.out.print("Seleccione cita: ");
-            Cita cita = citas.get(Integer.parseInt(scanner.nextLine().trim()) - 1);
-            System.out.print("Accion (1=Atender, 2=Cancelar): ");
-            int accion = Integer.parseInt(scanner.nextLine().trim());
+            Cita cita = citas.get(entrada.leerEntero("Seleccione cita: ") - 1);
+            int accion = entrada.leerEntero("Accion (1=Atender, 2=Cancelar): ");
 
             if (accion == 1) {
                 registrarAtencionCita(cita);
@@ -186,10 +171,8 @@ public class Menu {
     }
 
     private void registrarAtencionCita(Cita cita) {
-        System.out.print("Diagnostico: ");
-        String diagnostico = scanner.nextLine().trim();
-        System.out.print("Tratamiento: ");
-        String tratamiento = scanner.nextLine().trim();
+        String diagnostico = entrada.leerTexto("Diagnostico: ");
+        String tratamiento = entrada.leerTexto("Tratamiento: ");
         List<ServicioCobrar> servicios = capturarServicios();
         Comprobante comp = clinica.registrarAtencion(cita, diagnostico, tratamiento, servicios);
         System.out.println("Atencion registrada. Comprobante: " + comp.getFolio() + " ($" + comp.getTotal() + ")");
@@ -197,25 +180,98 @@ public class Menu {
 
     private List<ServicioCobrar> capturarServicios() {
         List<ServicioCobrar> lista = new ArrayList<>();
-        System.out.print("Servicio (1=Consulta general, 2=Vacunacion, 3=Cirugia): ");
-        int tipo = Integer.parseInt(scanner.nextLine().trim());
+        int tipo = entrada.leerEntero("Servicio (1=Consulta general, 2=Vacunacion, 3=Cirugia): ");
         if (tipo == 1) {
-            System.out.print("Motivo: ");
-            lista.add(new ConsultaGeneral(scanner.nextLine().trim()));
+            lista.add(new ConsultaGeneral(entrada.leerTexto("Motivo: ")));
         } else if (tipo == 2) {
-            System.out.print("Nombre de la vacuna: ");
-            String vacuna = scanner.nextLine().trim();
-            System.out.print("Costo de la vacuna: ");
-            double costo = Double.parseDouble(scanner.nextLine().trim());
+            String vacuna = entrada.leerTexto("Nombre de la vacuna: ");
+            double costo = entrada.leerDecimal("Costo de la vacuna: ");
             lista.add(new Vacunacion(150.0, vacuna, costo));
         } else if (tipo == 3) {
-            System.out.print("Horas de quirofano: ");
-            double horas = Double.parseDouble(scanner.nextLine().trim());
-            System.out.print("Factor de complejidad: ");
-            double factor = Double.parseDouble(scanner.nextLine().trim());
+            double horas = entrada.leerDecimal("Horas de quirofano: ");
+            double factor = entrada.leerDecimal("Factor de complejidad: ");
             lista.add(new Cirugia(1200.0, horas, factor));
         }
         return lista;
+    }
+
+    public void generarComprobante() {
+        List<Comprobante> comprobantes = clinica.getComprobantes();
+        if (comprobantes.isEmpty()) {
+            System.out.println("No hay comprobantes generados.");
+            return;
+        }
+        try {
+            for (int i = 0; i < comprobantes.size(); i++) {
+                System.out.println((i + 1) + ". " + comprobantes.get(i));
+            }
+            Comprobante comp = comprobantes.get(entrada.leerEntero("Seleccione comprobante: ") - 1);
+            System.out.println(comp.imprimirDetalle());
+        } catch (Exception e) {
+            System.out.println("Seleccion invalida.");
+        }
+    }
+
+    public void consultarHistorial() {
+        if (clinica.getMascotas().isEmpty()) {
+            System.out.println("No hay mascotas registradas.");
+            return;
+        }
+        try {
+            Mascota mascota = seleccionarMascota();
+            if (mascota.getHistorial() != null) {
+                System.out.println(mascota.getHistorial().obtenerResumen());
+            } else {
+                System.out.println("La mascota no cuenta con historial activo.");
+            }
+        } catch (Exception e) {
+            System.out.println("Seleccion invalida.");
+        }
+    }
+
+    public void listarMascotasYSonidos() {
+        List<Mascota> mascotas = clinica.getMascotas();
+        if (mascotas.isEmpty()) {
+            System.out.println("No hay mascotas registradas.");
+            return;
+        }
+        for (Mascota m : mascotas) {
+            System.out.println(m.getNombre() + " -> " + m.emitirSonido());
+        }
+    }
+
+    public void verTotalPorVeterinario() {
+        if (clinica.getVeterinarios().isEmpty()) {
+            System.out.println("No hay veterinarios registrados.");
+            return;
+        }
+        try {
+            Veterinario vet = seleccionarVeterinario();
+            List<Comprobante> cobros = clinica.consultarCobrosPorVeterinario(vet);
+            double suma = 0;
+            for (Comprobante c : cobros) {
+                System.out.println("  " + c);
+                suma += c.getTotal();
+            }
+            System.out.println("Total cobrado por " + vet.getNombreCompleto() + ": $" + suma);
+        } catch (Exception e) {
+            System.out.println("Seleccion invalida.");
+        }
+    }
+
+    public void darDeBajaMascota() {
+        if (clinica.getMascotas().isEmpty()) {
+            System.out.println("No hay mascotas registradas.");
+            return;
+        }
+        try {
+            Mascota mascota = seleccionarMascota();
+            mascota.darDeBaja();
+            clinica.getMascotas().remove(mascota);
+            System.out.println("Mascota dada de baja junto con su historial: " + mascota.getNombre());
+        } catch (Exception e) {
+            System.out.println("Seleccion invalida.");
+        }
     }
 
     private Mascota seleccionarMascota() {
@@ -223,8 +279,7 @@ public class Menu {
         for (int i = 0; i < mascotas.size(); i++) {
             System.out.println((i + 1) + ". " + mascotas.get(i));
         }
-        System.out.print("Seleccione mascota: ");
-        return mascotas.get(Integer.parseInt(scanner.nextLine().trim()) - 1);
+        return mascotas.get(entrada.leerEntero("Seleccione mascota: ") - 1);
     }
 
     private Veterinario seleccionarVeterinario() {
@@ -232,8 +287,7 @@ public class Menu {
         for (int i = 0; i < veterinarios.size(); i++) {
             System.out.println((i + 1) + ". " + veterinarios.get(i));
         }
-        System.out.print("Seleccione veterinario: ");
-        return veterinarios.get(Integer.parseInt(scanner.nextLine().trim()) - 1);
+        return veterinarios.get(entrada.leerEntero("Seleccione veterinario: ") - 1);
     }
 
     private Consultorio seleccionarConsultorio() {
@@ -241,7 +295,6 @@ public class Menu {
         for (int i = 0; i < consultorios.size(); i++) {
             System.out.println((i + 1) + ". " + consultorios.get(i));
         }
-        System.out.print("Seleccione consultorio: ");
-        return consultorios.get(Integer.parseInt(scanner.nextLine().trim()) - 1);
+        return consultorios.get(entrada.leerEntero("Seleccione consultorio: ") - 1);
     }
 }

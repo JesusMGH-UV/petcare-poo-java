@@ -11,6 +11,8 @@ public class Main {
         clinica.registrarConsultorio(2);
 
         Scanner scanner = new Scanner(System.in);
+        Entrada entrada = new Entrada(scanner);
+        Menu menu = new Menu(clinica, entrada);
         boolean activo = true;
 
         while (activo) {
@@ -25,14 +27,13 @@ public class Main {
             System.out.println("8. Ver total cobrado por veterinario");
             System.out.println("9. Dar de baja una mascota");
             System.out.println("0. Salir");
-            System.out.print("Seleccione una opcion: ");
 
-            String entrada = scanner.nextLine().trim();
-            if (entrada.equals("0")) {
+            int opcion = entrada.leerEntero("Seleccione una opcion: ");
+            if (opcion == 0) {
                 System.out.println("Saliendo del sistema...");
                 activo = false;
             } else {
-                System.out.println("Opcion no disponible.");
+                menu.procesarOpcion(opcion);
             }
         }
     }
