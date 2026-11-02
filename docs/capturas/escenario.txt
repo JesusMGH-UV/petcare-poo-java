@@ -1,0 +1,36 @@
+$ java -cp out app.Demostracion
+=== Citas agendadas ===
+CITA-001 | 2026-11-03T10:30 | Firulais | Dr(a). Roberto Ramirez | Consultorio #1 | PROGRAMADA
+CITA-002 | 2026-11-03T12:00 | Kiwi | Dr(a). Elena Soto | Consultorio #2 | PROGRAMADA
+CITA-003 | 2026-11-04T09:00 | Michi | Dr(a). Roberto Ramirez | Consultorio #1 | PROGRAMADA
+
+=== Prueba de regla de negocio (conflicto de horario) ===
+Error capturado correctamente: El veterinario ya tiene una cita a esa hora
+
+=== Comprobantes emitidos ===
+Comprobante CMP-0001 - 2026-11-02
+Mascota: Firulais
+Veterinario: Roberto Ramirez
+ - Consulta general (Revision anual): $350.0
+ - Aplicacion de vacuna: Rabia: $370.0
+Total: $720.0
+
+Comprobante CMP-0002 - 2026-11-02
+Mascota: Kiwi
+Veterinario: Elena Soto
+ - Consulta general (Valoracion preoperatoria): $350.0
+ - Intervencion quirurgica - 1.5 hrs: $2160.0
+Total: $2510.0
+
+=== Mascotas registradas y sonidos (polimorfismo) ===
+Firulais (Perro): Guau
+Michi (Gato): Miau
+Kiwi (AveExotica): Pio
+
+=== Total cobrado por veterinario ===
+Roberto Ramirez: $720.0
+Elena Soto: $2510.0
+
+=== Historial clinico de Firulais ===
+Expediente clinico [EXP-1]:
+* [2026-11-02] Diagnostico: Paciente sano, refuerzo anual -> Tratamiento: Vacuna antirrabica aplicada (Atendio: Roberto Ramirez)
